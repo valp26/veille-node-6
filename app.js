@@ -17,6 +17,12 @@ app.get('/', function (req, res) {
 	res.render('accueil.ejs');
 })
 
+////////////////////////////////// route adresses
+app.get('/list', function (req, res) {
+	// affiche le contenu du gabarit accueil
+	res.render('adresses.ejs');
+})
+
 ////////////////////////////////// route membres
 app.get('/membres', function (req, res) {
 	var cursor = db.collection('adresse').find().toArray(function(err, resultat){
