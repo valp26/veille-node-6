@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Mon Application</title>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+	</head>
+	<body>
+		<table class="tableau">
+			<!-- Entête du tableau selon le nombre de paramètres par élément de la base de données -->
+			<% 
+			let noLigne = 0;
+			for(elm of adresses) {%>
+				<% if (noLigne == 0) {%>
+					<tr>
+						<%
+						noLigne++
+						for (p in elm) { %>
+							<% if (p !== "_id") {%>
+								<th><%= p %></th>
+							<% } %>
+						<% } %>
+					</tr>
+				<% } %>
+
+				<!-- Affichage d'un élément de la base de données par ligne du tableau -->
+				<tr>
+					<% for (p in elm) { %>
+						<% if (p !== "_id") {%>
+							<td><%= elm[p] %></td>
+						<% } %>
+					<% } %>
+				</tr>
+			<% } %>
+		</table>
+	</body>
+</html>
