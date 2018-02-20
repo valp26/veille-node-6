@@ -11,6 +11,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs'); // générateur de template
 const MongoClient = require('mongodb').MongoClient;
 
+/*Permet d'accéder à l’index  automatique  « _id »*/
+const ObjectID = require('mongodb').ObjectID;
+
 let db // variable qui contiendra le lien sur la BD
 
 ////////////////////////////////// route accueil
@@ -69,6 +72,7 @@ app.post('/ajouter', (req, res) => {
 	}
 	
 })
+
 
 /*Connexion à la base de données MongoDB*/
 MongoClient.connect('mongodb://127.0.0.1:27017', (err, database) => {
