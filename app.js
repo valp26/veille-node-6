@@ -67,10 +67,33 @@ app.post('/ajouter', (req, res) => {
 		db.collection('adresse').save(objet, (err, result) => {
 		if (err) return console.log(err)
 		console.log('sauvegarder dans la BD')
-		res.redirect('/adresses')
+		res.redirect('/list')
 	})
 	}
 	
+})
+
+app.get('/delete/:id', (req, res) => {
+var id = req.params.id 
+var critere = ObjectID(req.params.id)
+console.log(critere)
+
+console.log(id)
+ db.collection('adresse')
+ .findOneAndDelete({"_id": critere}, (err, resultat) => {
+
+if (err) return console.log(err)
+ res.redirect('/list')
+ })
+})
+
+app.get('/trier/:cle/:ordre', (req, res) => {
+	let cle = req.params.cle
+	let ordre = (req.params.ordre == 'asc' ? 1 : -1)
+	let cursor = db.collection('adresse').find().sort(cle,ordre).toArray(function(err, resultat){
+		ordre = !ordre;
+		res.render('composants/adresses.ejs', {adresses: resultat, cle, ordre})
+	})
 })
 
 
