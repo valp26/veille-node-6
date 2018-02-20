@@ -11,6 +11,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs'); // générateur de template
 const MongoClient = require('mongodb').MongoClient;
 
+let db // variable qui contiendra le lien sur la BD
+
 ////////////////////////////////// route accueil
 app.get('/', function (req, res) {
 	// affiche le contenu du gabarit accueil
@@ -19,22 +21,14 @@ app.get('/', function (req, res) {
 
 ////////////////////////////////// route adresses
 app.get('/list', function (req, res) {
-	// affiche le contenu du gabarit accueil
-	res.render('adresses.ejs');
-})
-
-////////////////////////////////// route membres
-app.get('/membres', function (req, res) {
 	var cursor = db.collection('adresse').find().toArray(function(err, resultat){
 		if (err) return console.log(err)
 		var util = require("util");
  		console.log('util = ' + util.inspect(resultat));
 		// affiche le contenu de la BD
-		res.render('gabarit-membres.ejs', {adresses: resultat})
+		res.render('composants/adresses.ejs', {adresses: resultat})
 	}) 
 })
-
-let db // variable qui contiendra le lien sur la BD
 
 ////////////////////////////////// route formulaire
 app.get('/formulaire', function (req, res) {
@@ -44,11 +38,36 @@ app.get('/formulaire', function (req, res) {
 
 //////////////////////////////// route ajouter
 app.post('/ajouter', (req, res) => {
-	db.collection('adresse').save(req.body, (err, result) => {
+	console.log(req.body._id)
+	if(req.body._id ==""){
+		console.log("nouveau");
+		let objet ={
+			nom:req.body.nom,
+			prenom:req.body.prenom,
+			courriel: req.body.courriel,
+			telephone:req.body.telephone
+		}
+		db.collection('adresse').save(objet, (err, result) => {
+		if (err) return console.log(err)
+			console.log('sauvegarder dans la BD')
+			res.redirect('/list')
+		})
+	}else{
+		console.log("modifier");
+		let objet = {
+			_id: ObjectID(req.body._id),
+			nom:req.body.nom,
+			prenom:req.body.prenom,
+			courriel: req.body.courriel,
+			telephone:req.body.telephone
+		}
+		db.collection('adresse').save(objet, (err, result) => {
 		if (err) return console.log(err)
 		console.log('sauvegarder dans la BD')
-		res.redirect('/membres')
+		res.redirect('/adresses')
 	})
+	}
+	
 })
 
 /*Connexion à la base de données MongoDB*/
