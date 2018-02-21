@@ -39,7 +39,7 @@ app.get('/formulaire', function (req, res) {
 	res.render('gabarit-formulaire.ejs');
 })
 
-//////////////////////////////// route ajouter
+//////////////////////////////// route ajouter et modifier
 app.post('/ajouter', (req, res) => {
 	console.log(req.body._id)
 	if(req.body._id ==""){
@@ -73,6 +73,7 @@ app.post('/ajouter', (req, res) => {
 	
 })
 
+//////////////////////////////// route supprimer
 app.get('/delete/:id', (req, res) => {
 var id = req.params.id 
 var critere = ObjectID(req.params.id)
@@ -87,6 +88,7 @@ if (err) return console.log(err)
  })
 })
 
+//////////////////////////////// route trier
 app.get('/trier/:cle/:ordre', (req, res) => {
 	let cle = req.params.cle
 	let ordre = (req.params.ordre == 'asc' ? 1 : -1)
